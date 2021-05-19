@@ -1,0 +1,116 @@
+# 快速排序
+
+## 方法一
+
+```javascript
+const swap = (arr, i, j) => [arr[i], arr[j]] = [arr[j], arr[i]]
+
+// 查找数组第一个元素的位置
+// 每一次查找都可以固定一个元素的最终位置
+const partition = (arr, p, q) => {
+    let i = p
+    let x = arr[p]
+    let j = p + 1
+    for (j = p + 1; j <= q; j++) {
+        // 把小于arr[p]的数移动至左边
+        // arr[i] 永远小于x
+        if (arr[j] <= x) {
+            ++i
+            swap(arr, i, j)
+        }
+    }
+    swap(arr, i, p)
+    return i
+}
+
+const quickSort = (arr, p, q) => {
+    if (p < q) {
+        k = paritition(arr, p, q)
+        quickSort(arr, p, k - 1)
+        quickSort(arr, k + 1, q)
+    }
+}
+```
+
+## 方法二
+
+```javascript
+const swap = (arr, i, j) => [arr[i], arr[j]] = [arr[j], arr[i]]
+
+// 查找数组第一个元素的位置
+// 每一次查找都可以固定一个元素的最终位置
+const partition = (arr, left, right) => {
+    let mid = (left + right) >>> 1
+    let pivot = arr[mid]
+    let i = left, j = right
+    while (i <= j) {
+        while (arr[i] < pivot) {
+            i++
+        }
+        while (arr[j] > pivot) {
+            j--
+        }
+        if (i <= j) {
+            swap(arr, i, j)
+            i++
+            j--
+        }
+    }
+    return i
+}
+
+const quickSort = (arr, left, right) => {
+    if (arr.length > 1) {
+        index = paritition(arr, left, right)
+        quickSort(arr, left, index - 1)
+        quickSort(arr, index, right)
+    }
+}
+```
+
+
+
+### 练习1：寻找数组第k大的数
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var findKthLargest = function(nums, k) {
+  let n = nums.length
+    if (k > n) return
+    let index = quickSort(nums, 0, n - 1, k)
+    return nums[index]
+};
+
+var quickSort = function (nums, l, r, k) {
+    if (l >= r) {
+        return l
+    }
+    let p = partition(nums, l, r)
+    if (p + 1 === k) {
+        return p
+    }
+    if (p + 1 > k) {
+        return quickSort(nums, l, p - 1, k)
+    } else {
+        return quickSort(nums, p + 1, r, k)
+    }
+}
+
+var partition = function (nums, l, r) {
+    let v = nums[l], j = l, i = l + 1
+    while (i <= r) {
+        if (nums[i] >= v) {
+            [nums[j + 1], nums[i]] = [nums[i], nums[j + 1]]
+            j++
+        }
+        i++
+    }
+    [nums[l], nums[j]] = [nums[j], nums[l]]
+    return j
+}
+```
+
